@@ -1,23 +1,33 @@
 const canvas = document.getElementById("art");
 const ctx = canvas.getContext("2d");
-function getMousePose(e) {
+
+function getMousePos(e) {
   const rect = canvas.getBoundingClientRect();
   return {
     x: e.clientX - rect.left,
     y: e.clientY - rect.top,
   };
 }
+
 function mouseMove(e) {
-  const mousePose = getMousePose(e);
-  ctx.lineTo(mousePose.x, mousePose.y);
+  const mousePos = getMousePos(e);
+  ctx.lineTo(mousePos.x, mousePos.y);
+  ctx.stroke();
+  ctx.strokeStyle = "salmon";
+  ctx.lineWidth = 8;
 }
 
 canvas.addEventListener("mousedown", (e) => {
   e.preventDefault();
-  const mousePose = getMousePose(e);
+  const mousePos = getMousePos(e);
   ctx.beginPath();
-  ctx.moveTo(mousePose["x"], mousePose["y"]);
+  ctx.moveTo(mousePos["x"], mousePos["y"]);
   canvas.addEventListener("mousemove", mouseMove);
+  canvas.addEventListener("mouseup", () => {
+    canvas.removeEventListener("mousemove", mouseMove);
+  });
+});
 
-  console.log(ctx.moveTo(mousePose["x"], mousePose["y"]));
+reset.addEventListener("click", () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
